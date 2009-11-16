@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<callxml version="3.0">
+   <do label="mainmenu">
+        <prompt>which state?</prompt>
+        <getdigits var="mydigits" maxdigits="1" maxsilence="3s" cleardigits="true"/>
+        <on event="maxdigits">
+               <log>handler$mydigits;</log>
+                <if test="'$mydigits;' = '*'">
+                        <throw value="handlerstar"/>
+                </if>
+                <if test="'$mydigits;' = ''">
+                        <throw value="timeout"/>
+                </if>
+
+                <throw value="handler$mydigits;"/>
+
+        </on>
+        <on event="maxsilence">
+                <log>handler$mydigits;</log>
+                <if test="'$mydigits;' = '*'">
+	                <throw value="handlerstar"/>
+                </if>
+                <if test="'$mydigits;' = ''">
+                        <throw value="timeout"/>
+                </if>
+
+                <throw value="handler$mydigits;"/>
+          </on>
+        <on event="maxtime">
+                        <throw value="timeout"/>
+        </on>
+  </do>
+
+  <on event="timeout">
+                <wait value="1s"/>
+                <playaudio value="b.wav"/>
+                <wait value="1s"/>
+                <playaudio value="c.wav"/>
+                <playaudio value="star.wav"/>
+                <playdtmf value="1"/>
+                <wait value="5s"/>
+                <hangup/>
+  </on>
+  <on event="handler0" next="#mainmenu">
+        <wait value="2s"/>
+        <playaudio value="b.wav"/>
+        <wait value="2s"/>
+        <prompt>zero</prompt>
+        <playaudio value="c.wav"/>
+        <playdtmf value="*2"/>
+  </on>
+  <on event="handler1" next="#mainmenu">
+        <wait value="2s"/>
+        <playaudio value="b.wav"/>
+        <wait value="2s"/>
+        <prompt>one</prompt>
+        <playaudio value="c.wav"/>
+        <playdtmf value="12"/>
+  </on>
+  <on event="handler2" next="#mainmenu">
+        <wait value="5s"/>
+        <playaudio value="b.wav"/>
+        <wait value="4s"/>
+        <prompt>two</prompt>
+        <playaudio value="c.wav"/>
+        <playdtmf value="13"/>
+  </on>
+  <on event="handler3" next="#mainmenu">
+        <wait value="10s"/>
+        <playaudio value="b.wav"/>
+        <wait value="10s"/>
+        <prompt>three</prompt>
+        <playaudio value="c.wav"/>
+        <playdtmf value="14"/>
+  </on>
+  <on event="handler4" next="#mainmenu">
+        <wait value="5s"/>
+        <playaudio value="b.wav"/>
+        <wait value="2s"/>
+        <playaudio value="c.wav"/>
+        <playdtmf value="15"/>
+        <wait value="3s"/>
+        <recordaudio value="ftp://pdeschen:nu3ch0@ftp.voxeo.net/myrecording/this.wav" maxtime="5s" beep="false" format="audio/wav" termdigits="#"/>
+        <prompt>four</prompt>
+        <playaudio value="b.wav"/>
+        <playaudio value="c.wav"/>
+        <playdtmf value="16"/>
+        <!-- playaudio value="ftp://pdeschen:nu3ch0@ftp.voxeo.net/myrecording/this.wav"/ -->
+  </on>
+  <on event="handlerstar">
+        <wait value="1s"/>
+        <playaudio value="b.wav"/>
+        <wait value="1s"/>
+        <playaudio value="c.wav"/>
+        <playdtmf value="19"/>
+        <prompt>Goodbye</prompt>
+        <wait value="10s"/>
+        <hangup/>
+  </on>
+
+<on event="maxsilence" next="#mainmenu">
+        <log> *** state: $digits_; *** </log>
+        <prompt>invalid state</prompt>
+  </on>
+
+<on event="hangup">
+        <log> *** USER HUNG UP ***</log>
+</on>
+</callxml>
+
+

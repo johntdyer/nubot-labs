@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<callxml version="3.0">
+
+  <do>
+	<answer/>
+        <wait value="2s"/>
+<!--        <playaudio value="a.wav"/> -->
+        <recordcall value="100"/>
+  </do>
+  <block>
+    <prompt value="Welcome to diagnostic application!"/>
+  </block>
+
+   <do label="mainmenu">
+    	<playaudio value="c.wav"/>
+    	<playdtmf value="10"/>
+   	<prompt value="Select your test case"/>
+
+	<getdigits var="mydigits" maxdigits="3" cleardigits="true"/>
+
+  	<on event="maxdigits" next="#mainmenu">
+		<prompt>Too much digits</prompt>
+	</on>
+        <on event="maxsilence">
+		<log> test$mydigits; </log>
+		<throw value="test$mydigits;"/>
+        </on>
+  </do>
+  <on event="test10">
+	        <wait value="4s"/>
+        	<playaudio value="b.wav"/>
+        	<wait value="1s"/>
+        	<playaudio value="c.wav"/>
+        	<playdtmf value="11"/>
+          	<goto value="test10.callxml"/>
+  </on>
+
+  <on event="termdigit:#" next="#mainmenu">
+	  <prompt>Term digit.</prompt>
+  </on>
+
+  <on event="maxtime" next="#mainmenu">
+                <prompt>Please say something.</prompt>
+  </on>
+  <on event="error" next="#mainmenu">
+                <prompt>Error.</prompt>
+  </on>
+
+  <on event="hangup" test="1 = 1">
+                <log> *** USER HUNG UP 2 ***</log>
+  </on>
+
+
+</callxml>
