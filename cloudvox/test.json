@@ -1,4 +1,4 @@
 [
-{"name":"speak","phrase":"Thanks for calling!"},
-{"name":"playback","filename":"monkeys"}
+{"name":"speak","phrase":"Please wait, an agent will be with you shortly."},
+{"name":"speak","phrase":"Ha Ha Ha."},
 ]
