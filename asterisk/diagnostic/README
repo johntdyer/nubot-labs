@@ -1,0 +1,5 @@
+
+* Get the simple123.conf dial plan
+* In extensions.conf 
+** Add #include "<path>/simple123.conf"
+** exten => <DID>,1,Goto(simple,s,1)
