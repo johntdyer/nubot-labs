@@ -64,18 +64,18 @@ def responseHandler =
         { result ->
             if (result.value == "0")
             {ok0()
-                {delegate};
+                {delegate };
             }
             else if (result.value == "1")
             {ok1()
-                {delegate};
+                {delegate };
             }
             else if (result.value == "2")
             {ok2()
-                {delegate};
+                {delegate };
             }
             else
-            { say("Sorry.")
+            { say("Sorry. Wrong number.")
             }
         }
 
@@ -107,17 +107,21 @@ say("Welcome to diagnostic application!");
 sequencer("c10") { 
     
     result = ask("Select your test case.", [choices: '[DIGITS]']) 
-    switch (result.value)
+    if (result.value == "10")
     {
-        case "10":
-            ask01234();
-        case "11":
-            ok2 =
-            { await(3600000); }
-            ask01234();
-        default:
-            say("sorry.");
+        ask01234();
     }
+    else if (result.value == "11")
+    {
+        ok2 =
+                { await(3600000); };
+        ask01234();
+    }
+    else
+    {
+        say("Sorry wrong test case.");
+    }
+    
 }
 
 //stopCallRecording();
