@@ -37,6 +37,7 @@ def ok0 =
                     {
                         debug("handling 0");
                         ask("Zero. Now what?", [choices: '[DIGITS]', onChoice: responseHandler]);
+                        debug("post handling 0");
                         //responseHandler( result );
                     }; 
         }
@@ -76,8 +77,8 @@ def responseHandler =
         { result ->
             debug("handling response with " + result.value);
             if (result.value == "0")
-            {ok0()
-                {delegate };
+            {
+                ok0(delegate);
             }
             else if (result.value == "1")
             {ok1()
@@ -141,6 +142,7 @@ sequencer("c10") {
     
 }
 
+say("goodbye");
 //stopCallRecording();
 hangup();
 
