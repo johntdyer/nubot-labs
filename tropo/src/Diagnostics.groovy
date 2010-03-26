@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2002-2010 Nu Echo Inc.  All rights reserved. 
+ */
+
+
+/**
+ * 
+ * @author Nu Echo Inc.
+ */
+
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 def debugMode = true;
 
@@ -7,105 +17,115 @@ def sequencer =
         { sequence, closure ->
             for (dtmf in sequence)
             {
-                if (dtmf == "*")
-                    say("${baseAudioUrl}/dtmf/star.wav");
-                else if (dtmf == "#")
-                    say("${baseAudioUrl}/dtmf/pound.wav");
-                else
-                    say("${baseAudioUrl}/dtmf/${dtmf}.wav");
+                switch (dtmf)
+                {
+                    case "*":say("${baseAudioUrl}/dtmf/star.wav");; 
+                    case "#":say("${baseAudioUrl}/dtmf/pound.wav");
+                    default:say("${baseAudioUrl}/dtmf/${dtmf}.wav");
+                }
             }
-            if (closure)
-            {
-                return closure()
-            }
+            if (closure) return closure()
         }
 
 def debug =
         { message ->
             if (debugMode) log(message);
         }
-
+def responseHandler =
+        { /* dynamic def*/  };
 
 def ok0 =
-        { responseHandler ->
-            
-            debug(responseHandler.dump());
-            
+        { 
             await(2000);
             sequencer("b")
-                    {
-                    };
-            await(2000);
+                    { await(2000); };
             sequencer("c*1")
                     {
                         debug("handling 0");
-                        result = ask("Zero. Now what?", [choices: '[DIGITS]']);
-                        debug("post handling 0 response with " + result.value);;
-                        responseHandler( result );
+                        responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
                     }; 
         }
 
 def ok1 =
-        { responseHandler ->
+        { 
             await(2000);
             sequencer("b")
-                    {
-                    };
-            await(2000);
+                    {await(2000) };
             sequencer("c12")
                     {
                         debug("handling 1");
-                        ask("One. Now what?", [choices: '[DIGITS]', onChoice: responseHandler]);
-                        //debug("handling response with " + result.value);
-                        //responseHandler( result );
+                        responseHandler (ask("One. Now what?", [choices: '[DIGITS]']));
                     }; 
         }
 
 def ok2 =
-        { responseHandler ->
+        { 
             await(5000);
             sequencer("b")
-                    {
-                    };
-            await(4000);
+                    { await(4000) };
             sequencer("c13")
                     {
                         debug("handling 2");
-                        ask("Two. Now what?", [choices: '[DIGITS]', onChoice: responseHandler]);
-                        //responseHandler( result );
+                        responseHandler (ask("Two. Now what?", [choices: '[DIGITS]']));
                     }; 
         }
 
-def responseHandler = 
+def ok3 =
+        { 
+            await(10000);
+            sequencer("b")
+                    {await(10000); };
+            sequencer("c14")
+                    {
+                        debug("handling 3");
+                        responseHandler (ask("Three. Now what?", [choices: '[DIGITS]']));
+                    }; 
+        }
+
+def ok4 =
+        { 
+            await(5000);
+            sequencer("b")
+                    {await(2000); };
+            sequencer("c15")
+                    {
+                        await(3000);
+                        debug("handling 4.1");
+                        // we don't care about the response here
+                        ask("Say something for recording", [choices: '[DIGITS]']);
+                        sequencer("b")
+                                {
+                                    
+                                    sequencer("c16")
+                                    {
+                                        debug("handling 4.1");
+                                        result = ask("Four. Now what?", [choices: '[DIGITS]']);
+                                        responseHandler (result);
+                                    }; 
+                                };
+                        
+                    }; 
+        }
+
+responseHandler = 
         { result ->
             debug("handling response with " + result.value);
-            if (result.value == "0")
+            switch (result.value)
             {
-                ok0(owner);
-            }
-            else if (result.value == "1")
-            {
-                ok1(owner);
-            }
-            else if (result.value == "2")
-            {
-                ok2(owner);
-            }
-            else
-            { 
-                say("Sorry. Wrong number.")
+                case "0":ok0(); 
+                case "1":ok1();
+                case "2":ok2();
+                default:say("Sorry. Wrong number.");
             }
         }
 
 
-def ask01234 =
+def init =
         {
             
             await(4000);
             sequencer("b")
-                    {
-                    };
-            await(1000);
+                    {await(1000); };
             sequencer("c11")
                     {
                         debug("start test case");
@@ -128,24 +148,99 @@ sequencer("c10") {
     result = ask("Select your test case.", [choices: '[DIGITS]']) 
     
     debug("handling test case" + result.value);
-    
-    if (result.value == "10")
+    switch(result.value)
     {
-        ask01234();
+        // normal
+        case "10": init();
+        // timeout
+        case "11":
+            ok2 =
+            { await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']));};
+            init();
+        // unexpected-dtmf
+        case "12": 
+            ok3 =
+            {
+                await(10000);
+                sequencer("b")
+                        {
+                        };
+                await(10000);
+                sequencer("c24")
+                        {
+                            debug("handling 3");
+                            result = ask("Three. Now what?", [choices: '[DIGITS]']);
+                            responseHandler (result);
+                        }; 
+            }; 
+            init();
+        // system failure
+        case "13": 
+            ok2 =
+            {
+                await(5000);
+                sequencer("b")
+                        {await(4000) };
+                sequencer("c*9")
+                        {
+                            debug("handling 2");
+                            await(5000);
+                            hangup();
+                        };    
+            };
+            init();
+        // application hangup
+        case "14": 
+            ok3 = {hangup();}
+            init();
+        // max no match
+        case "15": 
+            ok2 = { 
+                await(5000);
+                sequencer("b")
+                        { await(4000) };
+                sequencer("c*0")
+                        {
+                            debug("handling 2");
+                            await(5000);
+                            hangup();
+                        }; 
+            }
+            init();
+        // no data to validate
+        case "16": 
+            ok2 = { 
+                await(5000);
+                sequencer("b")
+                        { await(4000) };
+                sequencer("c*7")
+                        {
+                            debug("handling 2");
+                            await(5000);
+                            hangup();
+                        }; 
+            }
+            init();
+        // dialog failure
+        case "17": 
+            ok2 = { 
+                await(5000);
+                sequencer("b")
+                        { await(4000) };
+                sequencer("c*8")
+                        {
+                            debug("handling 2");
+                            await(5000);
+                            hangup();
+                        }; 
+            }
+            init();
+        // ?
+        case "18": 
+            init();
+        default: say("Sorry wrong test case.");
     }
-    else if (result.value == "11")
-    {
-        ok2 =
-                { await(3600000); };
-        ask01234();
-    }
-    else
-    {
-        say("Sorry wrong test case.");
-    }
-    
 }
-
 say("goodbye");
 //stopCallRecording();
 hangup();
