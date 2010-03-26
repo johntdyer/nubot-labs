@@ -36,7 +36,8 @@ def ok0 =
             sequencer("c*1")
                     {
                         debug("handling 0");
-                        responseHandler( ask("Zero. Now what?", [choices: '[DIGITS]']) )
+                        result = ask("Zero. Now what?", [choices: '[DIGITS]']);
+                        responseHandler( result );
                     }; 
         }
 
@@ -50,7 +51,8 @@ def ok1 =
             sequencer("c12")
                     {
                         debug("handling 1");
-                        responseHandler( ask("One. Now what?", [choices: '[DIGITS]']))
+                        result = ask("One. Now what?", [choices: '[DIGITS]']);
+                        responseHandler( result );
                     }; 
         }
 
@@ -64,7 +66,8 @@ def ok2 =
             sequencer("c13")
                     {
                         debug("handling 2");
-                        responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']))
+                        result = ask("Two. Now what?", [choices: '[DIGITS]']);
+                        responseHandler( result );
                     }; 
         }
 
