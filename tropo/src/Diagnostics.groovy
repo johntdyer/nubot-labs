@@ -81,15 +81,15 @@ def responseHandler =
             debug("handling response with " + result.value);
             if (result.value == "0")
             {
-                ok0(this);
+                ok0(owner);
             }
             else if (result.value == "1")
             {
-                ok1(this);
+                ok1(owner);
             }
             else if (result.value == "2")
             {
-                ok2(this);
+                ok2(owner);
             }
             else
             { 
