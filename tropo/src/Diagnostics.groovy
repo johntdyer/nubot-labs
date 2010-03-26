@@ -28,6 +28,9 @@ def debug =
 
 def ok0 =
         { responseHandler ->
+            
+            debug(responseHandler.dump());
+            
             await(2000);
             sequencer("b")
                     {
