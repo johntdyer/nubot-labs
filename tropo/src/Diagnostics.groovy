@@ -6,7 +6,12 @@ def sequencer =
         { sequence, closure ->
             for (dtmf in sequence)
             {
-                say("${baseAudioUrl}/dtmf/${dtmf}.wav");
+                if (dtmf == "*")
+                    say("${baseAudioUrl}/dtmf/star.wav");
+                else if (dtmf == "#")
+                    say("${baseAudioUrl}/dtmf/pound.wav");
+                else
+                    say("${baseAudioUrl}/dtmf/${dtmf}.wav");
             }
             if (closure)
             {
