@@ -36,9 +36,9 @@ def ok0 =
             sequencer("c*1")
                     {
                         debug("handling 0");
-                        ask("Zero. Now what?", [choices: '[DIGITS]', onChoice: responseHandler]);
-                        debug("post handling 0");
-                        //responseHandler( result );
+                        result = ask("Zero. Now what?", [choices: '[DIGITS]']);
+                        debug("post handling 0 response with " + result.value);;
+                        responseHandler( result );
                     }; 
         }
 
@@ -78,18 +78,19 @@ def responseHandler =
             debug("handling response with " + result.value);
             if (result.value == "0")
             {
-                ok0(delegate);
+                ok0(this);
             }
             else if (result.value == "1")
-            {ok1()
-                {delegate };
+            {
+                ok1(this);
             }
             else if (result.value == "2")
-            {ok2()
-                {delegate };
+            {
+                ok2(this);
             }
             else
-            { say("Sorry. Wrong number.")
+            { 
+                say("Sorry. Wrong number.")
             }
         }
 
