@@ -14,6 +14,36 @@ def sequencer =
             }
         }
 
+def ask01234 =
+        {
+            
+            await(4000);
+            sequencer("b");
+            await(1000);
+            sequencer("c11")
+                    {
+                        result = ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]'])
+                        
+                        switch (result.value)
+                        {
+                            case "0":
+                                ok0();
+                            default:
+                                say("Sorry.");
+                        }                
+                        
+                    }; 
+            
+        }
+
+def ok0 =
+        {
+            await(2000);
+            sequencer("b");
+            await(2000);
+            sequencer("c*1")
+                    { result = ask("Zero. Now what?", [choices: '[DIGITS]']) }; 
+        }
 
 answer();
 
@@ -29,8 +59,8 @@ sequencer("c10") {
     result = ask("Select your test case.", [choices: '[DIGITS]']) 
     switch (result.value)
     {
-        case 10:
-            say("Ok 10");
+        case "10":
+            ask01234();
         default:
             say("sorry.");
     }
