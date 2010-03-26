@@ -14,6 +14,20 @@ def sequencer =
             }
         }
 
+def handleResponse = 
+        { result ->
+            switch (result.value)
+            {
+                case "0":
+                ok0();
+                case "1":
+                ok1();
+                case "2":
+                ok2();
+                default:
+                say("Sorry.");
+            }                
+        }
 
 def ok0 =
         {
@@ -22,8 +36,30 @@ def ok0 =
                     {};
             await(2000);
             sequencer("c*1")
-                    { result = ask("Zero. Now what?", [choices: '[DIGITS]']) }; 
+                    { handleResponse( ask("Zero. Now what?", [choices: '[DIGITS]']) ) }; 
         }
+
+def ok1 =
+        {
+            await(2000);
+            sequencer("b")
+                    {};
+            await(2000);
+            sequencer("c12")
+                    { handleResponse( ask("One. Now what?", [choices: '[DIGITS]'])) }; 
+        }
+
+def ok2 =
+        {
+            await(5000);
+            sequencer("b")
+                    {};
+            await(4000);
+            sequencer("c13")
+                    { handleResponse( ask("Two. Now what?", [choices: '[DIGITS]'])) }; 
+        }
+
+
 
 def ask01234 =
         {
@@ -34,16 +70,7 @@ def ask01234 =
             await(1000);
             sequencer("c11")
                     {
-                        result = ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]'])
-                        
-                        switch (result.value)
-                        {
-                            case "0":
-                                ok0();
-                            default:
-                                say("Sorry.");
-                        }                
-                        
+                        handleResponse( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']))
                     }; 
             
         }
@@ -63,6 +90,10 @@ sequencer("c10") {
     switch (result.value)
     {
         case "10":
+            ask01234();
+        case "11":
+            ok2 =
+            { await(3600000);}
             ask01234();
         default:
             say("sorry.");
