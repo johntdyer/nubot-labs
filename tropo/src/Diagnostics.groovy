@@ -14,51 +14,55 @@ def sequencer =
             }
         }
 
-def handleResponse = 
-        { result ->
-            switch (result.value)
-            {
-                case "0":
-                ok0();
-                case "1":
-                ok1();
-                case "2":
-                ok2();
-                default:
-                say("Sorry.");
-            }                
-        }
+
 
 def ok0 =
-        {
+        { responseHandler ->
             await(2000);
             sequencer("b")
                     {};
             await(2000);
             sequencer("c*1")
-                    { handleResponse( ask("Zero. Now what?", [choices: '[DIGITS]']) ) }; 
+                    { responseHandler( ask("Zero. Now what?", [choices: '[DIGITS]']) ) }; 
         }
 
 def ok1 =
-        {
+        { responseHandler ->
             await(2000);
             sequencer("b")
                     {};
             await(2000);
             sequencer("c12")
-                    { handleResponse( ask("One. Now what?", [choices: '[DIGITS]'])) }; 
+                    { responseHandler( ask("One. Now what?", [choices: '[DIGITS]'])) }; 
         }
 
 def ok2 =
-        {
+        { responseHandler ->
             await(5000);
             sequencer("b")
                     {};
             await(4000);
             sequencer("c13")
-                    { handleResponse( ask("Two. Now what?", [choices: '[DIGITS]'])) }; 
+                    { responseHandler( ask("Two. Now what?", [choices: '[DIGITS]'])) }; 
         }
 
+def responseHandler = 
+        { result ->
+            switch (result.value)
+            {
+                case "0":
+                ok0()
+                {delegate};
+                case "1":
+                ok1()
+                {delegate};
+                case "2":
+                ok2()
+                {delegate};
+                default:
+                say("Sorry.");
+            }                
+        }
 
 
 def ask01234 =
@@ -70,7 +74,7 @@ def ask01234 =
             await(1000);
             sequencer("c11")
                     {
-                        handleResponse( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']))
+                        responseHandler( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']))
                     }; 
             
         }
