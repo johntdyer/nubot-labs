@@ -1,4 +1,5 @@
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
+def debugMode = true;
 
 log("dnis: " + currentCall.calledID);
 
@@ -19,6 +20,10 @@ def sequencer =
             }
         }
 
+def debug =
+        { message ->
+            if (debugMode) log(message);
+        }
 
 
 def ok0 =
@@ -30,6 +35,7 @@ def ok0 =
             await(2000);
             sequencer("c*1")
                     {
+                        debug("handling 0");
                         responseHandler( ask("Zero. Now what?", [choices: '[DIGITS]']) )
                     }; 
         }
@@ -43,6 +49,7 @@ def ok1 =
             await(2000);
             sequencer("c12")
                     {
+                        debug("handling 1");
                         responseHandler( ask("One. Now what?", [choices: '[DIGITS]']))
                     }; 
         }
@@ -56,12 +63,14 @@ def ok2 =
             await(4000);
             sequencer("c13")
                     {
+                        debug("handling 2");
                         responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']))
                     }; 
         }
 
 def responseHandler = 
         { result ->
+            debug("handling response with " + result.value);
             if (result.value == "0")
             {ok0()
                 {delegate };
@@ -90,6 +99,7 @@ def ask01234 =
             await(1000);
             sequencer("c11")
                     {
+                        debug("start test case");
                         responseHandler( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']))
                     }; 
             
@@ -107,6 +117,9 @@ say("Welcome to diagnostic application!");
 sequencer("c10") { 
     
     result = ask("Select your test case.", [choices: '[DIGITS]']) 
+    
+    debug("handling test case" + result.value);
+    
     if (result.value == "10")
     {
         ask01234();
