@@ -5,6 +5,9 @@
 
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 def dtmfSequencerEnabled = true;
+def dnis = currentCall.calledID;
+
+log("dnis: " + dnis);
 
 def sequencer = { sequence, closure ->
 
@@ -16,6 +19,7 @@ def sequencer = { sequence, closure ->
 	}
 	if (closure) {return closure() }
 }
+
 
 answer();
 
