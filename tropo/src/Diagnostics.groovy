@@ -115,6 +115,8 @@ responseHandler =
                 case "0":ok0(); 
                 case "1":ok1();
                 case "2":ok2();
+                case "3":ok2();
+                case "4":ok2();
                 default:say("Sorry. Wrong number.");
             }
         }
