@@ -20,48 +20,58 @@ def ok0 =
         { responseHandler ->
             await(2000);
             sequencer("b")
-                    {};
+                    {
+                    };
             await(2000);
             sequencer("c*1")
-                    { responseHandler( ask("Zero. Now what?", [choices: '[DIGITS]']) ) }; 
+                    {
+                        responseHandler( ask("Zero. Now what?", [choices: '[DIGITS]']) )
+                    }; 
         }
 
 def ok1 =
         { responseHandler ->
             await(2000);
             sequencer("b")
-                    {};
+                    {
+                    };
             await(2000);
             sequencer("c12")
-                    { responseHandler( ask("One. Now what?", [choices: '[DIGITS]'])) }; 
+                    {
+                        responseHandler( ask("One. Now what?", [choices: '[DIGITS]']))
+                    }; 
         }
 
 def ok2 =
         { responseHandler ->
             await(5000);
             sequencer("b")
-                    {};
+                    {
+                    };
             await(4000);
             sequencer("c13")
-                    { responseHandler( ask("Two. Now what?", [choices: '[DIGITS]'])) }; 
+                    {
+                        responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']))
+                    }; 
         }
 
 def responseHandler = 
         { result ->
-            switch (result.value)
-            {
-                case "0":
-                ok0()
+            if (result.value == "0")
+            {ok0()
                 {delegate};
-                case "1":
-                ok1()
+            }
+            else if (result.value == "1")
+            {ok1()
                 {delegate};
-                case "2":
-                ok2()
+            }
+            else if (result.value == "2")
+            {ok2()
                 {delegate};
-                default:
-                say("Sorry.");
-            }                
+            }
+            else
+            { say("Sorry.")
+            }
         }
 
 
@@ -70,7 +80,8 @@ def ask01234 =
             
             await(4000);
             sequencer("b")
-                    {};
+                    {
+                    };
             await(1000);
             sequencer("c11")
                     {
@@ -97,7 +108,7 @@ sequencer("c10") {
             ask01234();
         case "11":
             ok2 =
-            { await(3600000);}
+            { await(3600000); }
             ask01234();
         default:
             say("sorry.");
