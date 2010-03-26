@@ -18,7 +18,8 @@ def ask01234 =
         {
             
             await(4000);
-            sequencer("b");
+            sequencer("b")
+                    {};
             await(1000);
             sequencer("c11")
                     {
@@ -39,7 +40,8 @@ def ask01234 =
 def ok0 =
         {
             await(2000);
-            sequencer("b");
+            sequencer("b")
+                    {};
             await(2000);
             sequencer("c*1")
                     { result = ask("Zero. Now what?", [choices: '[DIGITS]']) }; 
