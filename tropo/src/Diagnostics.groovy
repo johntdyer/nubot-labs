@@ -4,16 +4,13 @@ log("dnis: " + currentCall.calledID);
 
 def sequencer =
         { sequence, closure ->
-            
-            if (dtmfSequencerEnabled)
+            for (dtmf in sequence)
             {
-                for (dtmf in sequence)
-                {
-                    say("${baseAudioUrl}/dtmf/${dtmf}.wav");
-                }
+                say("${baseAudioUrl}/dtmf/${dtmf}.wav");
             }
             if (closure)
-            {return closure()
+            {
+                return closure()
             }
         }
 
