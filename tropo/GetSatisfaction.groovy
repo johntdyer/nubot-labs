@@ -31,8 +31,8 @@ say("${baseAudioUrl}/intro.wav");
 
 sequencer("a") { say("Hello 1. Thank you for calling the Travel Agency Customer Satisfaction Department") };
 
-result=ask( "Did you purchase Package A, Package B, or Package C?", 
-			[choices:"a( 1, package a), b( 2, package b), c(3, package c)"] );
+sequencer("c10") { result=ask( "Did you purchase Package A, Package B, or Package C?", 
+			[choices:"a( 1, package a), b( 2, package b), c(3, package c)"] ) };
 
 if (result.name=='choice')
 {
