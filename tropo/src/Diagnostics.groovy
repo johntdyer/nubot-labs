@@ -14,6 +14,17 @@ def sequencer =
             }
         }
 
+
+def ok0 =
+        {
+            await(2000);
+            sequencer("b")
+                    {};
+            await(2000);
+            sequencer("c*1")
+                    { result = ask("Zero. Now what?", [choices: '[DIGITS]']) }; 
+        }
+
 def ask01234 =
         {
             
@@ -35,16 +46,6 @@ def ask01234 =
                         
                     }; 
             
-        }
-
-def ok0 =
-        {
-            await(2000);
-            sequencer("b")
-                    {};
-            await(2000);
-            sequencer("c*1")
-                    { result = ask("Zero. Now what?", [choices: '[DIGITS]']) }; 
         }
 
 answer();
