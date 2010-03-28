@@ -115,9 +115,9 @@ def ok4 =
 
 def goodbye =
         {
-            await(1000);
+            await(2000);
             sequencer("b")
-                    {await(1000); };
+                    {await(2000); };
             sequencer("c19")
                     {
                         debug("goodbye");
