@@ -32,7 +32,9 @@ def debug =
             if (debugMode) log(message);
         }
 def responseHandler =
-        { /* dynamic def*/  };
+        {
+            /* dynamic def*/
+        };
 
 def ok0 =
         { 
@@ -107,6 +109,19 @@ def ok4 =
                     }; 
         }
 
+def goodbye =
+        {
+            await(1000);
+            sequencer("b")
+                    {await(1000); };
+            sequencer("c19")
+                    {
+                        debug("goodbye");
+                        say("Goodbye!");
+                        await(1000);
+                        hangup();
+                    }; 
+        }
 responseHandler = 
         { result ->
             debug("handling response with " + result.value);
@@ -117,6 +132,7 @@ responseHandler =
                 case "2":ok2();
                 case "3":ok3();
                 case "4":ok4();
+                case "*":goodbye();
                 default:say("Sorry. Wrong number.");
             }
         }
@@ -157,7 +173,9 @@ sequencer("c10") {
         // timeout
         case "11":
             ok2 =
-            { await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']));};
+            {
+                await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']));
+            };
             init();
         // unexpected-dtmf
         case "12": 
@@ -193,7 +211,7 @@ sequencer("c10") {
             init();
         // application hangup
         case "14": 
-            ok3 = {hangup();}
+            ok3 = {hangup(); }
             init();
         // max no match
         case "15": 
