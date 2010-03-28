@@ -18,7 +18,7 @@ def sequencer =
                     {
                         case "*":say("${baseAudioUrl}/dtmf/star.wav");; 
                         case "#":say("${baseAudioUrl}/dtmf/pound.wav");
-                        default:say("${baseAudioUrl}/dtmf/${dtmf.toLowerCase}.wav");
+                        default:say("${baseAudioUrl}/dtmf/${dtmf.toLowerCase()}.wav");
                     }
                 }
                 
@@ -102,10 +102,10 @@ if (event.name == "choice") {
     def ne = transfer( "sip:9${contacts[ event.value ].number}@10.6.63.201", [
             answerOnMedia: false,
             callerId:      "tel:+14076179024",
-            timeout:       60.3456,
+            timeout:       10,
             method:        "bridged", // fixed to bridged currently
             playrepeat:    3,
-            playvalue:     "Ring... Ring... Ring...",
+            playvalue:     "http://github.com/pdeschen/nubot-labs/raw/master/audio/transfer-music.wav",
             choices:       "1,2,3,4,5,6,7,8,9,0,*,#",
             onSuccess:     { ne-> log("*********transfered to $event.value.calleeId") },  
             onError:
