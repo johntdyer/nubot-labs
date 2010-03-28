@@ -15,12 +15,13 @@ log("dnis: " + currentCall.calledID);
 
 def sequencer =
         { sequence, closure ->
+            println ("Sequencing with: ${sequence}");
             for (dtmf in sequence)
             {
                 switch (dtmf)
                 {
-                    case "*":say("${baseAudioUrl}/dtmf/star.wav");; 
-                    case "#":say("${baseAudioUrl}/dtmf/pound.wav");
+                    case "*":say("${baseAudioUrl}/dtmf/star.wav");break; 
+                    case "#":say("${baseAudioUrl}/dtmf/pound.wav");break; 
                     default:say("${baseAudioUrl}/dtmf/${dtmf.toLowerCase()}.wav");
                 }
             }
@@ -127,12 +128,12 @@ responseHandler =
             debug("handling response with " + result.value);
             switch (result.value)
             {
-                case "0":ok0(); 
-                case "1":ok1();
-                case "2":ok2();
-                case "3":ok3();
-                case "4":ok4();
-                case "*":goodbye();
+                case "0":ok0();break; 
+                case "1":ok1();break; 
+                case "2":ok2();break; 
+                case "3":ok3();break; 
+                case "4":ok4();break; 
+                case "*":goodbye();break; 
                 default:say("Sorry. Wrong number.");
             }
         }
@@ -169,7 +170,9 @@ sequencer("c10") {
     switch(result.value)
     {
         // normal
-        case "10": init();
+        case "10": 
+            init();
+            break; 
         // timeout
         case "11":
             ok2 =
@@ -177,6 +180,7 @@ sequencer("c10") {
                 await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']));
             };
             init();
+            break; 
         // unexpected-dtmf
         case "12": 
             ok3 =
@@ -194,6 +198,7 @@ sequencer("c10") {
                         }; 
             }; 
             init();
+            break; 
         // system failure
         case "13": 
             ok2 =
@@ -209,10 +214,12 @@ sequencer("c10") {
                         };    
             };
             init();
+            break; 
         // application hangup
         case "14": 
             ok3 = {hangup(); }
             init();
+            break; 
         // max no match
         case "15": 
             ok2 = { 
@@ -227,6 +234,7 @@ sequencer("c10") {
                         }; 
             }
             init();
+            break; 
         // no data to validate
         case "16": 
             ok2 = { 
@@ -241,6 +249,7 @@ sequencer("c10") {
                         }; 
             }
             init();
+            break; 
         // dialog failure
         case "17": 
             ok2 = { 
@@ -255,6 +264,7 @@ sequencer("c10") {
                         }; 
             }
             init();
+            break; 
         // ?
         case "18": 
             init();
