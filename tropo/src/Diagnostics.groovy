@@ -222,7 +222,7 @@ sequencer("c10") {
             break; 
         // application hangup
         case "14": 
-            ok3 = {hangup(); }
+            ok2 = {hangup(); }
             init();
             break; 
         // max no match
