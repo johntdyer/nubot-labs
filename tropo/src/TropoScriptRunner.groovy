@@ -19,64 +19,26 @@ class TropoScriptRunner
         }
         def script = new File(args[0])
         def testScript = new File(args[1])
-        def testCases = [];
         
         if (testScript.exists())
         {
             println "Loading test cases";
             GroovyShell shell = new GroovyShell(new Binding());
-            testCases = shell.evaluate(testScript)
-            println "Using ${testCases}";
+            TropoApi.testCases = shell.evaluate(testScript)
+            println "Using ${TropoApi.testCases}";
         }
-        def testCaseIndex = 0;
-        
-        //def testCases = [[value:"10"], [value:"0"]];
-        
-        def currentCall = [calledID:"n.a."];
-        
-        def answer =
-                { println "answer: ok" };
-        
-        def await =
-                {timeInMs -> 
-                    println "wait: ${timeInMs}ms"
-                    //Thread.sleep(timeInMs);
-                }
-        
-        def say = 
-                {text -> println ("say: ${text}") }
-        
-        def ask = 
-                {text, attributes ->
-                    println ("ask: ${text}, ${attributes}")
-                    if (testCases.size <= testCaseIndex)
-                    {
-                        println("No more test cases. Aborting.");
-                        return;
-                    }
-                    def result = testCases[testCaseIndex];
-                    println ("\t=>test case result: ${result}")
-                    testCaseIndex++;
-                    return result;
-                }
-        
-        def hangup = 
-                { println ("hangup: ok") }
-        
-        def log =
-                { message -> println "log: ${message}" }
-        
         if (script.exists())
         {
             println "Evaluating script $script";
             Binding binding = new Binding();
-            binding.setVariable("currentCall", currentCall);
-            binding.setVariable("answer", answer);
-            binding.setVariable("await", await);
-            binding.setVariable("say", say);
-            binding.setVariable("ask", ask);
-            binding.setVariable("hangup", hangup);
-            binding.setVariable("log", log);
+            binding.setVariable("currentCall", TropoApi.currentCall);
+            binding.setVariable("answer", TropoApi.answer);
+            binding.setVariable("await", TropoApi.await);
+            binding.setVariable("say", TropoApi.say);
+            binding.setVariable("ask", TropoApi.ask);
+            binding.setVariable("prompt", TropoApi.prompt);
+            binding.setVariable("hangup", TropoApi.hangup);
+            binding.setVariable("log", TropoApi.log);
             GroovyShell shell = new GroovyShell(binding);
             shell.evaluate(script)
         }
