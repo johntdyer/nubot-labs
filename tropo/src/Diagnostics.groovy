@@ -21,7 +21,7 @@ def sequencer =
                 {
                     case "*":say("${baseAudioUrl}/dtmf/star.wav");; 
                     case "#":say("${baseAudioUrl}/dtmf/pound.wav");
-                    default:say("${baseAudioUrl}/dtmf/${dtmf}.wav");
+                    default:say("${baseAudioUrl}/dtmf/${dtmf.toLowerCase()}.wav");
                 }
             }
             if (closure) return closure()
