@@ -48,7 +48,10 @@ def ok0 =
             sequencer("c*1")
                     {
                         debug("handling 0");
-                        responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
+                        say("Operator.");
+                        await(2000);
+                        hangup();
+                        //responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
                     }; 
         }
 
@@ -237,7 +240,7 @@ sequencer("c10") {
                         }; 
             }
             init();
-            break; 
+        //break; 
         // no data to validate
         case "16": 
             ok2 = { 
