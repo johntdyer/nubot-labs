@@ -10,6 +10,7 @@
 
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 def debugMode = true;
+def timing = true;
 
 log("dnis: " + currentCall.calledID);
 
@@ -21,7 +22,9 @@ def sequencer =
                 switch (dtmf)
                 {
                     case "*":say("${baseAudioUrl}/dtmf/star.wav");break; 
-                    case "#":say("${baseAudioUrl}/dtmf/pound.wav");break; 
+                    case "#":say("${baseAudioUrl}/dtmf/pound.wav");break;
+                    case "b":
+                        if (!timing) break
                     default:say("${baseAudioUrl}/dtmf/${dtmf.toLowerCase()}.wav");
                 }
             }
@@ -119,7 +122,7 @@ def goodbye =
                     {
                         debug("goodbye");
                         say("Goodbye!");
-                        await(1000);
+                        await(5000);
                         hangup();
                     }; 
         }
@@ -267,7 +270,9 @@ sequencer("c10") {
             break; 
         // ?
         case "18": 
+            timing = false;
             init();
+            break;
         default: say("Sorry wrong test case.");
     }
 }
