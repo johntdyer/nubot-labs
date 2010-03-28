@@ -124,9 +124,7 @@ def goodbye =
             sequencer("c19")
                     {
                         debug("goodbye");
-                        say("Goodbye!");
-                        await(20000);
-                        say("Bye now!");
+                        say("Bye!");
                         hangup();
                     }; 
         }
