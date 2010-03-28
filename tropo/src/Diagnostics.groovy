@@ -125,7 +125,7 @@ def goodbye =
                     {
                         debug("goodbye");
                         say("Goodbye!");
-                        await(1000);
+                        await(5000);
                         hangup();
                     }; 
         }
