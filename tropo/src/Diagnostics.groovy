@@ -45,13 +45,13 @@ def ok0 =
             await(2000);
             sequencer("b")
                     { await(2000); };
-            sequencer("c*1")
+            sequencer("c*2")
                     {
                         debug("handling 0");
-                        say("Operator.");
-                        await(2000);
-                        hangup();
-                        //responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
+                        //                        say("Operator.");
+                        //                        await(2000);
+                        //                        hangup();
+                        responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
                     }; 
         }
 
