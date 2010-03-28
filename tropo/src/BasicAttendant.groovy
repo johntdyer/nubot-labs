@@ -60,9 +60,9 @@ def listOptions(theContacts)
 }
 
 def contacts = [
-        "jonathan": [ nameChoices: "Jonathan, Jonathan Taylor", number: "14074434233" ],
-        "michael" : [ nameChoices: "Michael, Michael Smith", number: "14074181800" ],
-        "stephen" : [ nameChoices: "Stephen, Stephen Neish", number: "14076463131" ] ]
+        "jonathan": [ nameChoices: "Jonathan, Jonathan Taylor", number: "1" ],
+        "michael" : [ nameChoices: "Michael, Michael Smith", number: "1" ],
+        "stephen" : [ nameChoices: "Stephen, Stephen Neish", number: "1" ] ]
 
 
 answer( 30 )
@@ -83,11 +83,13 @@ sequencer ("C20")
                 handlingEvent.onTimeout(
                 {
                     sequencer ("C21")
-                    {say( "I'm sorry, I didn't hear anything." ) } } )
+                    {say( "I'm sorry, I didn't hear anything." )
+                    } } )
                 handlingEvent.onBadChoice(
                         {
                             sequencer ("C22")
-                            {say( "I'm sorry, I didn't understand what you said." ) } } )
+                            {say( "I'm sorry, I didn't understand what you said." )
+                            } } )
             }
             ]
             )
