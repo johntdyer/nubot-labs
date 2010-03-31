@@ -24,7 +24,7 @@ if(event.name=='answer')
 {
     newCall = event.value;
     await(5000)
-    say("http://github.com/pdeschen/nubot-labs/raw/master/audio/dtmf/9.wav"")
+    say("http://github.com/pdeschen/nubot-labs/raw/master/audio/dtmf/9.wav")
     //await()
     result = newCall.ask("ok", [choices:"ok(for tomorrow the no parking regulation has been lifted)"])
     
