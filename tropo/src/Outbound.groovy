@@ -2,7 +2,8 @@
 answer();
 
 // Place a phone number here
-def phoneNo = 5147657222
+//def phoneNo = 5147657222
+def phoneNo = 5142220264
 
 event = call("sip:${phoneNo}@10.6.63.201", 
         [
@@ -24,12 +25,12 @@ if(event.name=='answer')
     newCall = event.value;
     //say()
     await(1000)
-    result = newCall.ask("http://github.com/pdeschen/nubot-labs/raw/master/audio/dtmf/9.wav", [choices:"ok(no parking regulation has been lifted)"])
+    result = newCall.ask("http://github.com/pdeschen/nubot-labs/raw/master/audio/dtmf/9.wav", [choices:"ok(hello my name is pascal)"])
     
-    log(result.choice.xml);
-    log(result.choice.confidence);
-    log(result.choice.interpretation);
-    log(result.choice.utterance);
+    //log(result.choice.xml);
+    //log(result.choice.confidence);
+    //log(result.choice.interpretation);
+    //log(result.choice.utterance);
     
     if (result.name == 'choice' && result.value=="ok")
     {
