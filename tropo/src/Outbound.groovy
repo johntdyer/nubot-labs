@@ -2,7 +2,7 @@
 answer();
 
 // Place a phone number here
-def phoneNo = 15142220264
+def phoneNo = 5147657222
 
 event = call("sip:${phoneNo}@10.6.63.201", 
         [
@@ -22,7 +22,18 @@ event = call("sip:${phoneNo}@10.6.63.201",
 if(event.name=='answer')
 {
     newCall = event.value;
-    newCall.say("This is a Tropo call, thank you for answering!")
+    say("http://github.com/pdeschen/nubot-labs/raw/master/audio/dtmf/9.wav")
+    await(1000)
+    result = newCall.ask("", [choices:"ok(for tomorrow the no parking regulation has been lifted)"])
+    if (result.name == 'choice' && result.value=="ok")
+    {
+        log("Lifted");
+    }
+    else
+    {
+        log("NOT Lifted");
+    }
+    
     // Error in debugger if event.value.calleeId is used
     log("Outgoing call gets answered by ");
     
