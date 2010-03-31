@@ -2,8 +2,8 @@
 answer();
 
 // Place a phone number here
-def phoneNo = 5147657222
-//def phoneNo = 5142220264
+//def phoneNo = 5147657222
+def phoneNo = 5142220264
 
 event = call("sip:${phoneNo}@10.6.63.201", 
         [
