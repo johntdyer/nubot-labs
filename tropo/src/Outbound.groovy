@@ -25,6 +25,12 @@ if(event.name=='answer')
     //say()
     await(1000)
     result = newCall.ask("http://github.com/pdeschen/nubot-labs/raw/master/audio/dtmf/9.wav", [choices:"ok(no parking regulation has been lifted)"])
+    
+    log(result.choice.xml);
+    log(result.choice.confidence);
+    log(result.choice.interpretation);
+    log(result.choice.utterance);
+    
     if (result.name == 'choice' && result.value=="ok")
     {
         log("Lifted");
