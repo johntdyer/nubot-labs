@@ -2,7 +2,6 @@
  * Copyright (c) 2002-2010 Nu Echo Inc.  All rights reserved. 
  */
 
-
 /**
  * 
  * @author Nu Echo Inc.
@@ -46,7 +45,7 @@ ok0 = {
     //                        say("Operator.");
     //                        await(2000);
     //                        hangup();
-    responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']), ok0);
+    responseHandler ( ask("Zero. Now what?", [timeout: 7, choices: '[DIGITS]']), ok0);
   };
 }
 def ok1 = {}
@@ -55,7 +54,7 @@ ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    result = ask("One. Now what?", [choices: '[DIGITS]'])
+    result = ask("One. Now what?", [timeout: 7, choices: '[DIGITS]'])
     responseHandler(result, ok1);
   };
 }
@@ -65,7 +64,7 @@ ok2 = {
   sequencer("b") { await(4000) };
   sequencer("c13") {
     debug("handling 2");
-    responseHandler (ask("Two. Now what?", [choices: '[DIGITS]']), this);
+    responseHandler (ask("Two. Now what?", [timeout: 7, choices: '[DIGITS]']), this);
   };
 }
 
@@ -75,7 +74,7 @@ ok3 = {
   sequencer("b") {await(10000); };
   sequencer("c14") {
     debug("handling 3");
-    responseHandler (ask("Three. Now what?", [choices: '[DIGITS]']));
+    responseHandler (ask("Three. Now what?", [timeout: 7, choices: '[DIGITS]']));
   };
 }
 def ok4 = {}
@@ -86,17 +85,11 @@ ok4 = {
     await(3000);
     debug("handling 4.1");
     // we don't care about the response here
-    ask("Say something for recording", [choices: '[DIGITS]']);
+    ask("Say something for recording", [timeout: 7, choices: '[DIGITS]']);
     sequencer("b") {
       sequencer("c16") {
         debug("handling 4.1");
-        result = ask("Four. Now what?", [choices: '[DIGITS]', onEvent: { event ->
-          if (event.name=='badChoice') { say( "I'm sorry, I didn't udnerstand what you said.")
-          }
-          if (event.name=='timeout')   { say( "I'm sorry. I didn't hear anything.")
-          }
-        }
-        ]);
+        result = ask("Four. Now what?", [timeout: 7, choices: '[DIGITS]']);
         responseHandler (result);
       };
     };
@@ -125,7 +118,7 @@ def maxnoinput = {
 def maxnomatch = {
   await(2000);
   sequencer("b") {await(2000); };
-  sequencer("c*1") {
+  sequencer("c*0") {
     debug("max no match");
     say("Max No match. Bye!");
     hangup();
@@ -176,7 +169,7 @@ init = {
   sequencer("b") {await(1000); };
   sequencer("c11") {
     debug("start test case");
-    responseHandler( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']), init)
+    responseHandler( ask("0, 1, 2, 3, or 4?", [timeout: 7, choices: '[DIGITS]']), init)
   };
 }
 
@@ -191,7 +184,7 @@ say("Welcome to diagnostic application!");
 
 sequencer("c10") { 
   
-  result = ask("Select your test case.", [choices: '[DIGITS]']) 
+  result = ask("Select your test case.", [timeout: 7, choices: '[DIGITS]']) 
   
   debug("handling test case" + result.value);
   switch(result.value) {
@@ -203,7 +196,7 @@ sequencer("c10") {
     case "11":
       ok2 =
       {
-        await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']), ok2);
+        await(3600000); responseHandler( ask("Two. Now what?", [timeout: 7, choices: '[DIGITS]']), ok2);
       };
       init();
       break; 
@@ -217,7 +210,7 @@ sequencer("c10") {
         await(10000);
         sequencer("c24") {
           debug("handling 3");
-          result = ask("Three. Now what?", [choices: '[DIGITS]']);
+          result = ask("Three. Now what?", [timeout: 7, choices: '[DIGITS]']);
           responseHandler (result, ok3);
         };
       }; 
