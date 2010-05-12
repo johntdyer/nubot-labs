@@ -43,7 +43,7 @@ def ok0 = {
     //                        say("Operator.");
     //                        await(2000);
     //                        hangup();
-    responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
+    responseHandler ( ask("Zero. Now what?", [repeat: 2, choices: '[DIGITS]']));
   };
 }
 
@@ -52,10 +52,14 @@ def ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    responseHandler (ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
-      if (event.name=='badChoice') { say( "I'm sorry, I didn't udnerstand what you said.")
+    responseHandler (ask("One. Now what?", [repeat: 2, choices: '[DIGITS]', onEvent: { event ->
+      if (event.name=='badChoice') { 
+        say( "no match.")
+        ok1()
       }
-      if (event.name=='timeout')   { say( "I'm sorry. I didn't hear anything.")
+      if (event.name=='timeout')   { 
+        say( "no input.")
+        ok1()
       }
     }]));
   };
