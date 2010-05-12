@@ -77,8 +77,9 @@ def ok3 = {
     responseHandler (ask("Three. Now what?", [choices: '[DIGITS]']));
   };
 }
+def ok4 = {}
 
-def ok4 = { 
+ok4 = { 
   await(5000);
   sequencer("b") { await(2000); };
   sequencer("c15") {
@@ -168,14 +169,14 @@ responseHandler = { result, state ->
   }
 }
 
-
-def init = {
+def init = {}
+init = {
   
   await(4000);
   sequencer("b") {await(1000); };
   sequencer("c11") {
     debug("start test case");
-    responseHandler( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']))
+    responseHandler( ask("0, 1, 2, 3, or 4?", [choices: '[DIGITS]']), init)
   };
 }
 
