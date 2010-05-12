@@ -53,14 +53,7 @@ def ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    result = ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
-      if (event.name=='badChoice') { 
-        say( "no match.")
-      }
-      if (event.name=='timeout')   { 
-        say( "no input.")
-      }
-    }])
+    result = ask("One. Now what?", [choices: '[DIGITS]'])
     
     if ( result.name == 'timeout' ) {
       if (noinputCount <= 2) {
