@@ -11,6 +11,7 @@
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 def debugMode = true;
 def timing = true;
+def noinputCount = 0;
 
 log("dnis: " + currentCall.calledID);
 
@@ -43,7 +44,7 @@ def ok0 = {
     //                        say("Operator.");
     //                        await(2000);
     //                        hangup();
-    responseHandler ( ask("Zero. Now what?", [repeat: 2, choices: '[DIGITS]']));
+    responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
   };
 }
 
@@ -52,13 +53,14 @@ def ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    responseHandler (ask("One. Now what?", [repeat: 2, choices: '[DIGITS]', onEvent: { event ->
+    responseHandler (ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
       if (event.name=='badChoice') { 
         say( "no match.")
         ok1()
       }
       if (event.name=='timeout')   { 
         say( "no input.")
+        noinputCount++
         ok1()
       }
     }]));
@@ -118,6 +120,9 @@ def goodbye = {
 }
 responseHandler = { result ->
   debug("handling response with " + result.value);
+  
+  noinputCount = 0
+  
   switch (result.value) {
     case "0":ok0();break; 
     case "1":ok1();break; 
