@@ -49,18 +49,18 @@ ok0 = {
     responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']), ok0);
   };
 }
-
-def ok1 = { 
+def ok1 = {}
+ok1 = { 
   await(2000);
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
     result = ask("One. Now what?", [choices: '[DIGITS]'])
-    responseHandler(result, this);
+    responseHandler(result, ok1);
   };
 }
-
-def ok2 = { 
+def ok2 = {}
+ok2 = { 
   await(5000);
   sequencer("b") { await(4000) };
   sequencer("c13") {
@@ -69,7 +69,8 @@ def ok2 = {
   };
 }
 
-def ok3 = { 
+def ok3 = {}
+ok3 = { 
   await(10000);
   sequencer("b") {await(10000); };
   sequencer("c14") {
@@ -78,7 +79,6 @@ def ok3 = {
   };
 }
 def ok4 = {}
-
 ok4 = { 
   await(5000);
   sequencer("b") { await(2000); };
@@ -203,7 +203,7 @@ sequencer("c10") {
     case "11":
       ok2 =
       {
-        await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']));
+        await(3600000); responseHandler( ask("Two. Now what?", [choices: '[DIGITS]']), ok2);
       };
       init();
       break; 
@@ -218,7 +218,7 @@ sequencer("c10") {
         sequencer("c24") {
           debug("handling 3");
           result = ask("Three. Now what?", [choices: '[DIGITS]']);
-          responseHandler (result);
+          responseHandler (result, ok3);
         };
       }; 
       init();
