@@ -36,8 +36,9 @@ def debug = { message ->
 def responseHandler = {
   /* dynamic def*/
 };
+def ok0 = {}
 
-def ok0 = { 
+ok0 = { 
   await(2000);
   sequencer("b") { await(2000); };
   sequencer("c*2") {
@@ -45,7 +46,7 @@ def ok0 = {
     //                        say("Operator.");
     //                        await(2000);
     //                        hangup();
-    responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']));
+    responseHandler ( ask("Zero. Now what?", [choices: '[DIGITS]']), ok0);
   };
 }
 
@@ -55,7 +56,7 @@ def ok1 = {
   sequencer("c12") {
     debug("handling 1");
     result = ask("One. Now what?", [choices: '[DIGITS]'])
-    responseHandler (result);
+    responseHandler(result, this);
   };
 }
 
@@ -64,7 +65,7 @@ def ok2 = {
   sequencer("b") { await(4000) };
   sequencer("c13") {
     debug("handling 2");
-    responseHandler (ask("Two. Now what?", [choices: '[DIGITS]']));
+    responseHandler (ask("Two. Now what?", [choices: '[DIGITS]']), this);
   };
 }
 
@@ -140,7 +141,7 @@ responseHandler = { result, state ->
     }
     say( "no match.")
     // reprompt...go back to state
-    state
+    if (state) state()
   }
   else if (result.name=='timeout')   { 
     noInputCount++
@@ -149,9 +150,8 @@ responseHandler = { result, state ->
     }
     say( "no input.")
     // reprompt...go back to state
-    state
+    if (state) state()
   }
-  
   // otherwise
   noInputCount = 0;
   noMatchCount = 0;
