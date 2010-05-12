@@ -11,7 +11,7 @@
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 def debugMode = true;
 def timing = true;
-def noinputCount = 0;
+def noInputCount = 0;
 
 log("dnis: " + currentCall.calledID);
 
@@ -53,18 +53,16 @@ def ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    result = ask("One. Now what?", [choices: '[DIGITS]'])
-    
-    if ( result.name == 'timeout' ) {
-      if (noinputCount <= 2) {
-        noinputCount++
-        ok1()
+    result = ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
+      if (event.name=='badChoice') { 
+        sequencer("b") {await(2000) };
+        sequencer("c12") {say( "no match.")}
       }
-      else {
-        say("max no noinput")
+      if (event.name=='timeout')   { 
+        sequencer("b") {await(2000) };
+        sequencer("c12") {say( "no input.")}
       }
-    }
-    
+    }])
     responseHandler (result);
   };
 }
@@ -120,10 +118,25 @@ def goodbye = {
     hangup();
   };
 }
+
+def maxnoinput = {
+  await(2000);
+  sequencer("b") {await(2000); };
+  sequencer("c*1") {
+    debug("max no input");
+    say("Max No Input. Bye!");
+    hangup();
+  };
+  
+}
 responseHandler = { result ->
   debug("handling response with " + result.value);
   
-  noinputCount = 0
+  noInputCount = 0;
+  
+  if (result.name=='timeout') {
+    maxnoinput();
+  }
   
   switch (result.value) {
     case "0":ok0();break; 
@@ -132,7 +145,8 @@ responseHandler = { result ->
     case "3":ok3();break; 
     case "4":ok4();break; 
     case "*":goodbye();break; 
-    default:say("Sorry. Wrong number.");
+    default:
+      say("No Match.");
   }
 }
 
