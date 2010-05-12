@@ -12,6 +12,7 @@ def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 def debugMode = true;
 def timing = true;
 def noInputCount = 0;
+def noMatchCount = 0;
 
 log("dnis: " + currentCall.calledID);
 
@@ -53,16 +54,7 @@ def ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    result = ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
-      if (event.name=='badChoice') { 
-        sequencer("b") {await(2000) };
-        sequencer("c12") {say( "no match.")}
-      }
-      if (event.name=='timeout')   { 
-        sequencer("b") {await(2000) };
-        sequencer("c12") {say( "no input.")}
-      }
-    }])
+    result = ask("One. Now what?", [choices: '[DIGITS]'])
     responseHandler (result);
   };
 }
@@ -127,16 +119,42 @@ def maxnoinput = {
     say("Max No Input. Bye!");
     hangup();
   };
+}
+def maxnomatch = {
+  await(2000);
+  sequencer("b") {await(2000); };
+  sequencer("c*1") {
+    debug("max no match");
+    say("Max No match. Bye!");
+    hangup();
+  };
   
 }
-responseHandler = { result ->
+responseHandler = { result, state ->
   debug("handling response with " + result.value);
   
-  noInputCount = 0;
-  
-  if (result.name=='timeout') {
-    maxnoinput();
+  if (result.name=='badChoice') {
+    noMatchCount++
+    if (noMatchCount >=3) {
+      maxnomatch();        
+    }
+    say( "no match.")
+    // reprompt...go back to state
+    state
   }
+  else if (result.name=='timeout')   { 
+    noInputCount++
+    if (noInputCount >=3) {
+      maxnoinput();        
+    }
+    say( "no input.")
+    // reprompt...go back to state
+    state
+  }
+  
+  // otherwise
+  noInputCount = 0;
+  noMatchCount = 0;
   
   switch (result.value) {
     case "0":ok0();break; 
@@ -146,7 +164,7 @@ responseHandler = { result ->
     case "4":ok4();break; 
     case "*":goodbye();break; 
     default:
-      say("No Match.");
+      say("Error");
   }
 }
 
@@ -193,7 +211,8 @@ sequencer("c10") {
       ok3 =
       {
         await(10000);
-        sequencer("b") { };
+        sequencer("b") {
+        };
         await(10000);
         sequencer("c24") {
           debug("handling 3");
