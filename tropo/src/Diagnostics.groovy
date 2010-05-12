@@ -53,17 +53,26 @@ def ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    responseHandler (ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
+    result = ask("One. Now what?", [choices: '[DIGITS]', onEvent: { event ->
       if (event.name=='badChoice') { 
         say( "no match.")
-        ok1()
       }
       if (event.name=='timeout')   { 
         say( "no input.")
+      }
+    }])
+    
+    if ( result.name == 'timeout' ) {
+      if (noinputCount <= 2) {
         noinputCount++
         ok1()
       }
-    }]));
+      else {
+        say("max no noinput")
+      }
+    }
+    
+    responseHandler (result);
   };
 }
 
