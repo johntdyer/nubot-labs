@@ -93,7 +93,7 @@ ok4 = {
       sequencer("c16") {
         debug("handling 4.1");
         result = ask("Recorded. Now what?", askAttributes);
-        responseHandler (result);
+        responseHandler (result, {});
       };
     };
   };
