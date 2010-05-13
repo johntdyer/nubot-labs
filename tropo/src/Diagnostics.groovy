@@ -12,8 +12,11 @@ def debugMode = true;
 def timing = true;
 def noInputCount = 0;
 def noMatchCount = 0;
+def askAttributes = [timeout: 7, choices: '[DIGITS]']
 
 log("dnis: " + currentCall.calledID);
+
+
 
 def sequencer = { sequence, closure ->
   println ("Sequencing with: ${sequence}");
@@ -45,7 +48,7 @@ ok0 = {
     //                        say("Operator.");
     //                        await(2000);
     //                        hangup();
-    responseHandler ( ask("Zero. Now what?", [timeout: 7, choices: '[DIGITS]']), ok0);
+    responseHandler ( ask("Zero. Now what?", askAttributes), ok0);
   };
 }
 def ok1 = {}
@@ -54,7 +57,7 @@ ok1 = {
   sequencer("b") {await(2000) };
   sequencer("c12") {
     debug("handling 1");
-    result = ask("One. Now what?", [timeout: 7, choices: '[DIGITS]'])
+    result = ask("One. Now what?", askAttributes)
     responseHandler(result, ok1);
   };
 }
@@ -64,7 +67,7 @@ ok2 = {
   sequencer("b") { await(4000) };
   sequencer("c13") {
     debug("handling 2");
-    responseHandler (ask("Two. Now what?", [timeout: 7, choices: '[DIGITS]']), this);
+    responseHandler (ask("Two. Now what?", askAttributes), this);
   };
 }
 
@@ -74,7 +77,7 @@ ok3 = {
   sequencer("b") {await(10000); };
   sequencer("c14") {
     debug("handling 3");
-    responseHandler (ask("Three. Now what?", [timeout: 7, choices: '[DIGITS]']));
+    responseHandler (ask("Three. Now what?", askAttributes));
   };
 }
 def ok4 = {}
@@ -85,11 +88,11 @@ ok4 = {
     await(3000);
     debug("handling 4.1");
     // we don't care about the response here
-    ask("Say something for recording", [timeout: 7, choices: '[DIGITS]']);
+    ask("Say something for recording", askAttributes);
     sequencer("b") {
       sequencer("c16") {
         debug("handling 4.1");
-        result = ask("Four. Now what?", [timeout: 7, choices: '[DIGITS]']);
+        result = ask("Four. Now what?", askAttributes);
         responseHandler (result);
       };
     };
@@ -102,6 +105,7 @@ def goodbye = {
   sequencer("c19") {
     debug("goodbye");
     say("Bye!");
+    await(4000);
     hangup();
   };
 }
@@ -169,7 +173,7 @@ init = {
   sequencer("b") {await(1000); };
   sequencer("c11") {
     debug("start test case");
-    responseHandler( ask("0, 1, 2, 3, or 4?", [timeout: 7, choices: '[DIGITS]']), init)
+    responseHandler( ask("0, 1, 2, 3, or 4?", askAttributes), init)
   };
 }
 
@@ -184,7 +188,7 @@ say("Welcome to diagnostic application!");
 
 sequencer("c10") { 
   
-  result = ask("Select your test case.", [timeout: 7, choices: '[DIGITS]']) 
+  result = ask("Select your test case.", askAttributes) 
   
   debug("handling test case" + result.value);
   switch(result.value) {
@@ -196,7 +200,7 @@ sequencer("c10") {
     case "11":
       ok2 =
       {
-        await(3600000); responseHandler( ask("Two. Now what?", [timeout: 7, choices: '[DIGITS]']), ok2);
+        await(3600000); responseHandler( ask("Two. Now what?", askAttributes), ok2);
       };
       init();
       break; 
@@ -210,7 +214,7 @@ sequencer("c10") {
         await(10000);
         sequencer("c24") {
           debug("handling 3");
-          result = ask("Three. Now what?", [timeout: 7, choices: '[DIGITS]']);
+          result = ask("Three. Now what?", askAttributes);
           responseHandler (result, ok3);
         };
       }; 
