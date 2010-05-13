@@ -12,7 +12,7 @@ def debugMode = true;
 def timing = true;
 def noInputCount = 0;
 def noMatchCount = 0;
-def askAttributes = [timeout: 7, choices: '0, 1, 2, 3, 5, 6, 7, 8, 9, *']
+def askAttributes = [timeout: 7, choices: '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, *']
 
 log("dnis: " + currentCall.calledID);
 
