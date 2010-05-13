@@ -86,13 +86,13 @@ ok4 = {
   sequencer("b") { await(2000); };
   sequencer("c15") {
     await(3000);
-    debug("handling 4.1");
+    debug("handling 4");
     // we don't care about the response here
     ask("Say something for recording", askAttributes);
     sequencer("b") {
       sequencer("c16") {
         debug("handling 4.1");
-        result = ask("Four. Now what?", askAttributes);
+        result = ask("Recorded. Now what?", askAttributes);
         responseHandler (result);
       };
     };
@@ -144,7 +144,7 @@ responseHandler = { result, state ->
   else if (result.name=='timeout')   { 
     noInputCount++
     if (noInputCount >=3) {
-      maxnoinput();        
+      maxnoinput();
     }
     say( "no input.")
     // reprompt...go back to state
