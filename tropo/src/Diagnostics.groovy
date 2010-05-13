@@ -188,7 +188,7 @@ say("Welcome to diagnostic application!");
 
 sequencer("c10") { 
   
-  result = ask("Select your test case.", askAttributes) 
+  result = ask("Select your test case.", [timeout: 7, choices: '[2 DIGITS]']) 
   
   debug("handling test case" + result.value);
   switch(result.value) {
