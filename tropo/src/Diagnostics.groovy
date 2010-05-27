@@ -70,7 +70,7 @@ ok2 = {
   sequencer("b") { await(4000) };
   sequencer("c13") {
     debug("handling 2");
-    responseHandler (ask("Two. Now what?", askAttributes), this);
+    responseHandler (ask("Two. Now what?", askAttributes), ok2);
   };
 }
 
@@ -81,7 +81,7 @@ ok3 = {
   sequencer("b") {await(10000); };
   sequencer("c14") {
     debug("handling 3");
-    responseHandler (ask("Three. Now what?", askAttributes));
+    responseHandler (ask("Three. Now what?", askAttributes), ok3);
   };
 }
 def ok4 = {
@@ -184,7 +184,7 @@ init = {
   };
 }
 
-def callAttributes = [clid:currentCall.calledID, dnis:currentCall.callerID]
+def callAttributes = [clid:currentCall.callerID, dnis:currentCall.calledID]
 
 def text= new URL("http://blog.nuecho.com/tropo.txt?${callAttributes}").openStream().text
 
