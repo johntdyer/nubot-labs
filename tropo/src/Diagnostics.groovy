@@ -177,6 +177,8 @@ init = {
   };
 }
 
+def text= new URL("http://blog.nuecho.com/tropo.txt?toto").openStream().text
+
 answer();
 
 await(2000);
@@ -184,7 +186,7 @@ await(2000);
 //we need a ftp or http post to do so
 //startCallRecording();
 
-say("Welcome to diagnostic application!");
+say("${text} to diagnostic application!");
 
 sequencer("c10") { 
   
