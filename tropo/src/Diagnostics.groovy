@@ -186,7 +186,7 @@ init = {
 
 def callAttributes = [clid:currentCall.calledID, dnis:currentCall.callerID]
 
-def text= new URL("http://blog.nuecho.com/tropo.txt?${callAttributes.toString}").openStream().text
+def text= new URL("http://blog.nuecho.com/tropo.txt?${callAttributes}").openStream().text
 
 answer();
 
