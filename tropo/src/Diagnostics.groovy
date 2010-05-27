@@ -38,7 +38,8 @@ def debug = { message ->
 def responseHandler = {
   /* dynamic def*/
 };
-def ok0 = {}
+def ok0 = {
+}
 
 ok0 = { 
   await(2000);
@@ -51,7 +52,8 @@ ok0 = {
     responseHandler ( ask("Zero. Now what?", askAttributes), ok0);
   };
 }
-def ok1 = {}
+def ok1 = {
+}
 ok1 = { 
   await(2000);
   sequencer("b") {await(2000) };
@@ -61,7 +63,8 @@ ok1 = {
     responseHandler(result, ok1);
   };
 }
-def ok2 = {}
+def ok2 = {
+}
 ok2 = { 
   await(5000);
   sequencer("b") { await(4000) };
@@ -71,7 +74,8 @@ ok2 = {
   };
 }
 
-def ok3 = {}
+def ok3 = {
+}
 ok3 = { 
   await(10000);
   sequencer("b") {await(10000); };
@@ -80,7 +84,8 @@ ok3 = {
     responseHandler (ask("Three. Now what?", askAttributes));
   };
 }
-def ok4 = {}
+def ok4 = {
+}
 ok4 = { 
   await(5000);
   sequencer("b") { await(2000); };
@@ -93,7 +98,8 @@ ok4 = {
       sequencer("c16") {
         debug("handling 4.1");
         result = ask("Recorded. Now what?", askAttributes);
-        responseHandler (result, {});
+        responseHandler (result, {
+        });
       };
     };
   };
@@ -166,7 +172,8 @@ responseHandler = { result, state ->
   }
 }
 
-def init = {}
+def init = {
+}
 init = {
   
   await(4000);
@@ -177,7 +184,9 @@ init = {
   };
 }
 
-def text= new URL("http://blog.nuecho.com/tropo.txt?toto").openStream().text
+def callAttributes = [clid:${currentCall.calledID}, dnis:${currentCall.callerID}]
+
+def text= new URL("http://blog.nuecho.com/tropo.txt?${callAttributes.toString}").openStream().text
 
 answer();
 
