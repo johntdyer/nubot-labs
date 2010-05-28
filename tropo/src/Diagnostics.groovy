@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 /*
  * Copyright (c) 2002-2010 Nu Echo Inc.  All rights reserved. 
  */
@@ -14,9 +16,11 @@ def noInputCount = 0;
 def noMatchCount = 0;
 def askAttributes = [timeout: 7, choices: '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, *']
 
-log("dnis: " + currentCall.calledID);
+def callid = UUID.randomUUID().toString()
 
-def callAttributes = [clid:currentCall.callerID, dnis:currentCall.calledID]
+def callAttributes = [callid:callid, clid:currentCall.callerID, dnis:currentCall.calledID, ]
+
+log(callAttributes)
 
 def sequencer = { sequence, closure ->
   println ("Sequencing with: ${sequence}");
