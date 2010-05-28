@@ -16,7 +16,7 @@ def askAttributes = [timeout: 7, choices: '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, *']
 
 log("dnis: " + currentCall.calledID);
 
-
+def callAttributes = [clid:currentCall.callerID, dnis:currentCall.calledID]
 
 def sequencer = { sequence, closure ->
   println ("Sequencing with: ${sequence}");
@@ -35,6 +35,12 @@ def sequencer = { sequence, closure ->
 def debug = { message ->
   if (debugMode) log(message);
 }
+
+def stat = {state ->
+  def text = new URL("http://blog.nuecho.com/tropo.txt?state=${state}&call=${callAttributes}").openStream().text
+  return text
+}
+
 def responseHandler = {
   /* dynamic def*/
 };
@@ -106,12 +112,13 @@ ok4 = {
 }
 
 def goodbye = {
+  stat("goodbye")
   await(2000);
   sequencer("b") {await(2000); };
   sequencer("c19") {
     debug("goodbye");
     say("Bye!");
-    await(10000);
+    await(5000);
     hangup();
   };
 }
@@ -168,6 +175,7 @@ responseHandler = { result, state ->
     case "4":ok4();break; 
     case "*":goodbye();break; 
     default:
+      stat("error")
       say("Error");
   }
 }
@@ -184,18 +192,18 @@ init = {
   };
 }
 
-def callAttributes = [clid:currentCall.callerID, dnis:currentCall.calledID]
-
-def text= new URL("http://blog.nuecho.com/tropo.txt?${callAttributes}").openStream().text
+stat("answering")
 
 answer();
+
+stat("answered")
 
 await(2000);
 
 //we need a ftp or http post to do so
 //startCallRecording();
 
-say("${text} to diagnostic application!");
+say("Welcome to diagnostic application!");
 
 sequencer("c10") { 
   
@@ -294,9 +302,12 @@ sequencer("c10") {
       timing = false;
       init();
       break;
-    default: say("Sorry wrong test case.");
+    default: 
+      stat("invalid-test-case"); 
+      say("Sorry wrong test case.");
   }
 }
+stat("unhandled"); 
 say("goodbye");
 //stopCallRecording();
 hangup();
