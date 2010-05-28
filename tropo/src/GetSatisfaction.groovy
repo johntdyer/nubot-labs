@@ -1,11 +1,3 @@
-// --------------------------------------------
-@Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.5.0' )
-import groovyx.net.http.* 
-
-// using both speech and touch-tone input
-// See http://www.tropo.com for more info
-// --------------------------------------------
-
 def baseAudioUrl = "http://github.com/pdeschen/nubot-labs/raw/master/audio";
 
 // this should be reverted but I wanna have dtmf over skype for now
